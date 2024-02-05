@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace WebAPIDemo.Filters.ActionFilters
 {
-    public class Shirt_ValidateCreateShirtFilterAttribute : ActionFilterAttribute
+    public class Shirt_ValidateCreateShirtFilterAttribute : Attribute, IActionFilter
     {
         private readonly ApplicationDbContext db;
 
@@ -16,10 +16,14 @@ namespace WebAPIDemo.Filters.ActionFilters
         {
             this.db = db;
         }
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            base.OnActionExecuting(context);
 
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
             var shirt = context.ActionArguments["shirt"] as Shirt;
 
             if (shirt == null)
@@ -57,8 +61,17 @@ namespace WebAPIDemo.Filters.ActionFilters
                     context.Result = new BadRequestObjectResult(problemDetails);
                 }
             }
+        }
+
+        /*
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            var shirt = context.ActionArguments["shirt"] as Shirt;
+
 
 
         }
+        */
     }
 }
